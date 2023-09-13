@@ -41,8 +41,47 @@ app.get('/user/:username', async (req, res) => {
       sql.close();
     }
   });
-  
 
+// app.get('/group/:username',async (req,res) =>{
+//     try{
+//         const {username} = req.params;
+//         const pool = await db.connectDB();
+//         const query = queries.getGroupusername(username);
+//         const result = await pool.request().query(query);
+
+//         if (result.recordset.length === 1) {
+//             res.json(result.recordset[0]);
+//           } else {
+//             res.status(404).json({ error: 'User not found' });
+//           }
+
+//     }catch (err){
+//     console.error('Error retrieving user data:', err);
+//       res.status(500).json({ error: 'Internal Server Error' });
+//     }
+//     finally {
+//         sql.close();
+//     }
+// });  
+app.get('/group/:username', async (req, res) => {
+    try {
+      const { username } = req.params;
+      const pool = await db.connectDB();
+      const query =  queries.getGroupusername(username);
+      const result = await pool.request().query(query);
+      
+      if (result.recordset.length === 1) {
+        return res.json(result.recordset);
+      } else {
+        res.status(404).json({ error: 'User not found' });
+      }
+    } catch (err) {
+      console.error('Error retrieving user data:', err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } finally {
+      sql.close();
+    }
+  });
 
 app.post('/login', async (req, res) => {
   try {
