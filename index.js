@@ -71,7 +71,7 @@ app.get('/group/:username', async (req, res) => {
       const result = await pool.request().query(query);
       
       if (result.recordset.length === 1) {
-        return res.json(result.recordset);
+        res.json(result.recordset);
       } else {
         res.status(404).json({ error: 'User not found' });
       }
