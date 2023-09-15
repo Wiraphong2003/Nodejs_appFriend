@@ -3,9 +3,13 @@ const bodyParser = require('body-parser');
 const sql = require('mssql');
 const db = require('./db');
 const queries = require('./queries');
+const cors = require('cors')
+
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cors());
+
 
 const PORT = process.env.PORT || 3000;
 
