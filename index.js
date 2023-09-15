@@ -40,7 +40,7 @@ app.get('/user/:username', async (req, res) => {
       const pool = await db.connectDB();
       const query =  queries.getuserfromname(username);
       const result = await pool.request().query(query);
-  
+  https://desktop.postman.com/?desktopVersion=10.18.1&userId=28526230&teamId=0
       if (result.recordset.length === 1) {
         res.json(result.recordset[0]);
       } else {
@@ -61,7 +61,8 @@ app.get('/group/:username', async (req, res) => {
       const query =  queries.getGroupusername(username);
       const result = await pool.request().query(query);
       
-      if (result.recordset.length === 1) {
+      
+      if (result) {
         res.json(result.recordset);
       } else {
         res.status(404).json({ error: 'User not found' });
