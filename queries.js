@@ -18,10 +18,36 @@ function getUserQuery() {
     and     USER_F.username = '${username}'`;
   }
   
+  function getmemberfromnamegroup(groupname){
+    return `SELECT      user_F.username,user_F.img,USER_F.name,USER_F.phone,memo,mood,lat,lng,statusdate
+    FROM        GROUP_F,GROUP_MEMBER,user_F,STATUS
+    WHERE       GROUP_F.groupid = GROUP_MEMBER.groupid
+    AND         GROUP_MEMBER.username = USER_F.username
+    AND         USER_F.username = STATUS.username
+    AND         GROUP_F.name = '${groupname}'`;
+  }
+
+  function createGroup(namegroup,username){
+    return `INSERT INTO GROUP_F (name,hostname) VALUES ('${namegroup}','${username}')`;
+  }
+
+  function registeruser(username, name, password, img, email, phone, facebook, ig) {
+    return `INSERT INTO USER_F (username, name, password, img, email, phone, facebook, ig) VALUES ('${username}', '${name}', '${password}', '${img}', '${email}', '${phone}', '${facebook}', '${ig}');`;
+  }
+
+  function getnameGroup(namegroup){
+    return `SELECT * FROM GROUP_F WHERE name = '${namegroup}'`
+  }
+
+
   module.exports = {
     getUserQuery,
     loginQuery,
     getuserfromname,
-    getGroupusername
+    getGroupusername,
+    getmemberfromnamegroup,
+    registeruser,
+    createGroup,
+    getnameGroup
   };
   
