@@ -26,10 +26,18 @@ function getUserQuery() {
     // AND         USER_F.username = STATUS.username
     // AND         GROUP_F.name = '${groupname}'
     // AND         GROUP_F.groupid = ${memid}`;
-    return `select  GROUP_MEMBER.username,USER_F.name,USER_F.img,USER_F.phone,USER_F.facebook,USER_F.ig
-    from    GROUP_MEMBER,USER_F
-    WHERE   GROUP_MEMBER.username = USER_F.username
-    AND     groupid = ${memid}`;
+
+
+    // return `select  GROUP_MEMBER.username,USER_F.name,USER_F.img,USER_F.phone,USER_F.facebook,USER_F.ig
+    // from    GROUP_MEMBER,USER_F
+    // WHERE   GROUP_MEMBER.username = USER_F.username
+    // AND     groupid = ${memid}`;
+
+    return `SELECT  GROUP_MEMBER.username,USER_F.name,USER_F.img,USER_F.phone,USER_F.email,USER_F.facebook,USER_F.ig,memo,mood,lat,lng,statusdate
+    FROM    STATUS,USER_F,GROUP_MEMBER
+    WHERE   USER_F.username = STATUS.username
+    AND     USER_F.username = GROUP_MEMBER.username
+    AND     GROUP_MEMBER.groupid = ${memid}`
   }
 
   function createGroup(namegroup,username){
@@ -58,6 +66,12 @@ function getUserQuery() {
     AND     GROUP_MEMBER.username = '${username}'`;
   }
 
+  function getstatus(username){
+    return `SELECT  memo,mood,lat,lng,statusdate
+    FROM    STATUS
+    WHERE   username = '${username}'`
+  }
+
   module.exports = {
     getUserQuery,
     loginQuery,
@@ -68,6 +82,7 @@ function getUserQuery() {
     createGroup,
     getnameGroup,
     addfriendfromGroup,
-    getmemberid
+    getmemberid,
+    getstatus
   };
   

@@ -85,8 +85,7 @@ app.get('/group/:username', async (req, res) => {
       
       const query =  queries.getmemberfromnamegroup(resultmemid.recordset[0].groupid);
       const result = await pool.request().query(query);
-      
-      
+    
       if (result) {
         res.json(result.recordset);
       } else {
