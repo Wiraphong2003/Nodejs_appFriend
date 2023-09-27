@@ -11,7 +11,7 @@ function getUserQuery() {
     return `SELECT * FROM USER_F WHERE username = '${username}'`;
   }
   function getGroupusername(username){
-    return `select  GROUP_F.name
+    return `select  GROUP_F.groupid,GROUP_F.name
     from    GROUP_MEMBER,USER_F,GROUP_F
     where   USER_F.username = GROUP_MEMBER.username
     and     GROUP_MEMBER.groupid = GROUP_F.groupid
