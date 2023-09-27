@@ -152,21 +152,34 @@ app.post('/createGroup', async (req, res) => {
     const {namegroup,username} = req.body;
     const pool = await db.connectDB();
 
-    const checkUserQuery = queries.getnameGroup(namegroup)
-    const checkUserResult = await pool.request().query(checkUserQuery);
+    //check user
+    const checkUserQueryuser = queries.getuserfromname(username)
+    const checkUserResultU = await pool.request().query(checkUserQueryuser);
+    
+    if (checkUserResultU.recordset.length > 0) {
+      
+      const checkUserQuerygroup = queries.getGroupusername(username)
+      const checkUserResultG = await pool.request().query(checkUserQuerygroup);
+      const resultnamegroupfromuser = checkUserResultG.recordset;
 
-    if (checkUserResult.recordset.length > 0) {
-      return res.status(401).json({ error: 'Groupname already exists' });
+      // console.log(resultnamegroupfromuser);
+      const isNamegroupExists = resultnamegroupfromuser.some(item => item.name === namegroup);
+      
+      if(isNamegroupExists){
+        return res.status(401).json({ error: 'Groupname already exists' });
+      }else{
+        const insertUserQuery = queries.createGroup(namegroup,username)
+        const insertResult = await pool.request().query(insertUserQuery);
+        if (insertResult.rowsAffected[0] === 1) {
+          return res.json({ "status": 'successful' });
+        } else {
+          res.status(500).json({ error: 'Failed to create Group' });
+        }
+      }
+    }else{
+      res.status(401).json({ error: 'Not Fount username'});
     }
 
-    const insertUserQuery = queries.createGroup(namegroup,username)
-    const insertResult = await pool.request().query(insertUserQuery);
-
-    if (insertResult.rowsAffected[0] === 1) {
-      return res.json({ "status": 'successful' });
-    } else {
-      res.status(500).json({ error: 'Failed to create Group' });
-    }
   } catch (err) {
     console.error('Error during registration:', err);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -174,6 +187,46 @@ app.post('/createGroup', async (req, res) => {
     sql.close();
   }
 });
+
+app.post('/addfriendinGroup', async (req, res) => {
+  try {
+    const {usernameingroup,groupname,usernameNew} = req.body;
+    const pool = await db.connectDB();
+
+        //check user
+        const checkUserQueryuser = queries.getuserfromname(usernameingroup)
+        const checkUserResultU = await pool.request().query(checkUserQueryuser);
+        
+        if (checkUserResultU.recordset.length > 0) {
+          const checkUserQuerygroup = queries.getGroupusername(usernameingroup)
+          const checkUserResultG = await pool.request().query(checkUserQuerygroup);
+          const resultnamegroupfromuser = checkUserResultG.recordset;
+    
+          // console.log(resultnamegroupfromuser);
+          const isNamegroupExists = resultnamegroupfromuser.some(item => item.name === groupname);
+          
+          if(isNamegroupExists){
+            const insertUserQuery = queries.addfriendfromGroup(groupname,usernameNew)
+            const insertResult = await pool.request().query(insertUserQuery);
+            if (insertResult.rowsAffected[0] === 1) {
+              return res.json({ "status": 'successful' });
+            } else {
+              res.status(500).json({ error: 'Failed to add friend' });
+            }      
+          }else{
+            return res.status(401).json({ error: 'Not Fount Groupname' });  
+          }
+        }else{
+          res.status(401).json({ error: 'Not Fount username'});
+        }
+  } catch (err) {
+    console.error('Error during registration:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  } finally {
+    sql.close();
+  }
+});
+
 
 
 app.listen(PORT, () => {

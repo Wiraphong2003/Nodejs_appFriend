@@ -38,7 +38,12 @@ function getUserQuery() {
   function getnameGroup(namegroup){
     return `SELECT * FROM GROUP_F WHERE name = '${namegroup}'`
   }
-
+  function addfriendfromGroup(groupname,usernameNew){
+    return `INSERT INTO GROUP_MEMBER (groupid, username)
+    SELECT GROUP_F.groupid, '${usernameNew}' 
+    FROM GROUP_F
+    WHERE GROUP_F.name = '${groupname}'`;
+  }
 
   module.exports = {
     getUserQuery,
@@ -48,6 +53,7 @@ function getUserQuery() {
     getmemberfromnamegroup,
     registeruser,
     createGroup,
-    getnameGroup
+    getnameGroup,
+    addfriendfromGroup
   };
   
