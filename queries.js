@@ -18,13 +18,18 @@ function getUserQuery() {
     and     USER_F.username = '${username}'`;
   }
   
-  function getmemberfromnamegroup(groupname){
-    return `SELECT      user_F.username,user_F.img,USER_F.name,USER_F.phone,memo,mood,lat,lng,statusdate
-    FROM        GROUP_F,GROUP_MEMBER,user_F,STATUS
-    WHERE       GROUP_F.groupid = GROUP_MEMBER.groupid
-    AND         GROUP_MEMBER.username = USER_F.username
-    AND         USER_F.username = STATUS.username
-    AND         GROUP_F.name = '${groupname}'`;
+  function getmemberfromnamegroup(memid){
+    // return `SELECT      user_F.username,user_F.img,USER_F.name,USER_F.phone,memo,mood,lat,lng,statusdate
+    // FROM        GROUP_F,GROUP_MEMBER,user_F,STATUS
+    // WHERE       GROUP_F.groupid = GROUP_MEMBER.groupid
+    // AND         GROUP_MEMBER.username = USER_F.username
+    // AND         USER_F.username = STATUS.username
+    // AND         GROUP_F.name = '${groupname}'
+    // AND         GROUP_F.groupid = ${memid}`;
+    return `select  GROUP_MEMBER.username,USER_F.name,USER_F.img,USER_F.phone,USER_F.facebook,USER_F.ig
+    from    GROUP_MEMBER,USER_F
+    WHERE   GROUP_MEMBER.username = USER_F.username
+    AND     groupid = ${memid}`;
   }
 
   function createGroup(namegroup,username){
@@ -38,11 +43,19 @@ function getUserQuery() {
   function getnameGroup(namegroup){
     return `SELECT * FROM GROUP_F WHERE name = '${namegroup}'`
   }
-  function addfriendfromGroup(groupname,usernameNew){
+  function addfriendfromGroup(usernameNew,memid){
     return `INSERT INTO GROUP_MEMBER (groupid, username)
-    SELECT GROUP_F.groupid, '${usernameNew}' 
-    FROM GROUP_F
-    WHERE GROUP_F.name = '${groupname}'`;
+    SELECT  GROUP_F.groupid, '${usernameNew}' 
+    FROM    GROUP_F
+    WHERE   GROUP_F.groupid = ${memid}`;
+  }
+
+  function getmemberid(groupname,username){
+    return `select  GROUP_MEMBER.groupid
+    from    GROUP_F ,GROUP_MEMBER
+    WHERE   GROUP_F.groupid = GROUP_MEMBER.groupid
+    AND     NAME = '${groupname}'
+    AND     GROUP_MEMBER.username = '${username}'`;
   }
 
   module.exports = {
@@ -54,6 +67,7 @@ function getUserQuery() {
     registeruser,
     createGroup,
     getnameGroup,
-    addfriendfromGroup
+    addfriendfromGroup,
+    getmemberid
   };
   

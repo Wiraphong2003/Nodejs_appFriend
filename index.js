@@ -74,11 +74,16 @@ app.get('/group/:username', async (req, res) => {
     }
   });
 
-  app.get('/membergroup/:namegroup', async (req, res) => {
+  app.get('/membergroup/:username/:namegroup', async (req, res) => {
     try {
-      const { namegroup } = req.params;
+      const {username, namegroup } = req.params;
       const pool = await db.connectDB();
-      const query =  queries.getmemberfromnamegroup(namegroup);
+
+      const querymemid =  queries.getmemberid(namegroup,username);
+      const resultmemid = await pool.request().query(querymemid);
+      
+      
+      const query =  queries.getmemberfromnamegroup(resultmemid.recordset[0].groupid);
       const result = await pool.request().query(query);
       
       
@@ -206,7 +211,11 @@ app.post('/addfriendinGroup', async (req, res) => {
           const isNamegroupExists = resultnamegroupfromuser.some(item => item.name === groupname);
           
           if(isNamegroupExists){
-            const insertUserQuery = queries.addfriendfromGroup(groupname,usernameNew)
+
+            const querymemid =  queries.getmemberid(groupname,usernameingroup);
+            const resultmemid = await pool.request().query(querymemid);
+
+            const insertUserQuery = queries.addfriendfromGroup(usernameNew,resultmemid.recordset[0].groupid)
             const insertResult = await pool.request().query(insertUserQuery);
             if (insertResult.rowsAffected[0] === 1) {
               return res.json({ "status": 'successful' });
