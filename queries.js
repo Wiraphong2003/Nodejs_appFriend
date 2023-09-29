@@ -41,7 +41,7 @@ function getUserQuery() {
   }
 
   function createGroup(namegroup,username){
-    return `INSERT INTO GROUP_F (name,hostname) VALUES ('${namegroup}','${username}')`;
+    return `INSERT INTO GROUP_F (name,username) VALUES ('${namegroup}','${username}')`;
   }
 
   function registeruser(username, name, password, img, email, phone, facebook, ig) {
