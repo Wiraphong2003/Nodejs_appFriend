@@ -69,9 +69,15 @@ function getUserQuery() {
   function getstatus(username){
     return `SELECT  memo,mood,lat,lng,statusdate
     FROM    STATUS
-    WHERE   username = '${username}'`
+    WHERE   username = '${username}'`f
   }
 
+  function getmemberinfroup(gid){
+    return `SELECT  GROUP_MEMBER.username,USER_F.name,USER_F.img,USER_F.phone,USER_F.email,USER_F.facebook,USER_F.ig
+    FROM    GROUP_MEMBER,USER_F
+    WHERE   GROUP_MEMBER.username = USER_F.username
+    AND     groupid = '${gid}'`;
+  }
   module.exports = {
     getUserQuery,
     loginQuery,
@@ -83,6 +89,7 @@ function getUserQuery() {
     getnameGroup,
     addfriendfromGroup,
     getmemberid,
-    getstatus
+    getstatus,
+    getmemberinfroup
   };
   

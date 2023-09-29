@@ -99,6 +99,30 @@ app.get('/group/:username', async (req, res) => {
     }
   });
 
+  
+  app.get('/datauseringroup/:groupid', async (req, res) => {
+    try {
+      const {groupid } = req.params;
+      const pool = await db.connectDB();
+    
+      
+      const query =  queries.getmemberinfroup(groupid);
+      const result = await pool.request().query(query);
+    
+      if (result) {
+        res.json(result.recordset);
+      } else {
+        res.status(404).json({ error: 'User not found' });
+      }
+    } catch (err) {
+      console.error('Error retrieving user data:', err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } finally {
+      sql.close();
+    }
+  });
+
+
 
 
 app.post('/login', async (req, res) => {
