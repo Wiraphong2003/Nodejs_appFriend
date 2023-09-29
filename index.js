@@ -243,7 +243,7 @@ app.post('/addfriendinGroup', async (req, res) => {
             const insertUserQuery = queries.addfriendfromGroup(usernameNew,resultmemid.recordset[0].groupid)
             const insertResult = await pool.request().query(insertUserQuery);
             if (insertResult.rowsAffected[0] === 1) {
-              return res.json({ "status": 'successful' });
+              return res.json({ "status": true });
             } else {
               res.status(500).json({ error: 'Failed to add friend' });
             }      
