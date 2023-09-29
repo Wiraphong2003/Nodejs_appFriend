@@ -69,7 +69,7 @@ function getUserQuery() {
   function getstatus(username){
     return `SELECT  memo,mood,lat,lng,statusdate
     FROM    STATUS
-    WHERE   username = '${username}'`f
+    WHERE   username = '${username}'`
   }
 
   function getmemberinfroup(gid){
