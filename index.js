@@ -21,6 +21,28 @@ app.get("/", (req, res)=>{
   res.send("API FRIEND");
 });
 
+app.post('/registerHomecoming', async (req, res) => {
+  try {
+    const { firstName, lastName, nickname, category, drinkingLevel, foodPreferences } = req.body;
+    const pool = await db.connectDB();
+    console.log(firstName);
+    const insertUserQuery = queries.insertuserhomecoming(firstName, lastName, nickname, category, drinkingLevel, foodPreferences);
+    const insertResult = await pool.request().query(insertUserQuery);
+
+    if (insertResult.rowsAffected[0] === 1) {
+      return res.json({ "status": 'successful' });
+    } else {
+      res.status(500).json({ error: 'Failed to register' });
+    }
+  } catch (err) {
+    console.error('Error during registration:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  } finally {
+    sql.close();
+  }
+});
+// ============================================================
+
 app.get('/user', async (req, res) => {
   try {
     const pool = await db.connectDB();

@@ -1,3 +1,11 @@
+function insertuserhomecoming(firstName,lastName,nickName,type,Drinking,Food_allergy){
+  return `INSERT INTO userhomecoming (firstName,lastName,nickName,[type],Drinking,Food_allergy) VALUES ('${firstName}','${lastName}','${nickName}','${type}','${Drinking}','${Food_allergy}')`
+}
+
+
+// ===============================================================
+
+
 function getUserQuery() {
     return `select      USER_F.*,memo,mood,lat,lng,statusdate
             FROM        USER_F,STATUS
@@ -79,6 +87,8 @@ function getUserQuery() {
     AND     groupid = '${gid}'`;
   }
   module.exports = {
+    insertuserhomecoming,
+    // =====================================
     getUserQuery,
     loginQuery,
     getuserfromname,
