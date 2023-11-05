@@ -86,6 +86,34 @@ function getUserQuery() {
     WHERE   GROUP_MEMBER.username = USER_F.username
     AND     groupid = '${gid}'`;
   }
+
+  function updatememo(username,memo){
+    return `UPDATE STATUS
+    SET memo = '${memo}'
+    WHERE username = '${username}'
+     `
+  }
+
+  
+  function updatenamegroup(username,name,id){
+    return `UPDATE GROUP_F
+    SET name = '${name}'
+    WHERE   username = '${username}'
+    AND     groupid = '${id}'
+     `
+  }
+
+    
+  function deleteGroup(username,id){
+    return `DELETE  GROUP_F
+    WHERE   username = '${username}'
+    AND     groupid = '${id}'
+     `
+  }
+
+
+
+
   module.exports = {
     insertuserhomecoming,
     // =====================================
@@ -100,6 +128,9 @@ function getUserQuery() {
     addfriendfromGroup,
     getmemberid,
     getstatus,
-    getmemberinfroup
+    getmemberinfroup,
+    updatememo,
+    updatenamegroup,
+    deleteGroup
   };
   

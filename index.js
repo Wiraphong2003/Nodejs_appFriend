@@ -284,6 +284,94 @@ app.post('/addfriendinGroup', async (req, res) => {
 });
 
 
+app.put('/updatememo', async (req, res) => {
+  try {
+    const { username, memo } = req.body;
+    const pool = await db.connectDB();
+  
+    const updatememo = queries.updatememo(username, memo);
+    const insertResult = await pool.request().query(updatememo);
+
+    if (insertResult.rowsAffected[0] === 1) {
+      return res.json({ "status": 'successful' });
+    } else {
+      res.status(500).json({ error: 'Failed to register' });
+    }
+  } catch (err) {
+    console.error('Error during registration:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  } finally {
+    sql.close();
+  }
+});
+
+app.put('/updatenamegroup', async (req, res) => {
+  try {
+    const { username, name,id } = req.body;
+    const pool = await db.connectDB();
+  
+    const updatememo = queries.updatenamegroup(username, name,id);
+    const insertResult = await pool.request().query(updatememo);
+
+    if (insertResult.rowsAffected[0] === 1) {
+      return res.json({ "status": 'successful' });
+    } else {
+      res.status(500).json({ error: 'Failed to register' });
+    }
+  } catch (err) {
+    console.error('Error during registration:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  } finally {
+    sql.close();
+  }
+});
+
+// app.delete('/delteGroup', async(req,res)=>{
+//   try {
+//     const { username,id } = req.body;
+//     const pool = await db.connectDB();
+  
+//     const deletegroup = queries.deleteGroup(username,id);
+//     const Result = await pool.request().query(deletegroup);
+
+//     if (Result.rowsAffected[0] === 1) {
+//       return res.json({ "status": 'successful' });
+//     } else {
+//       res.status(500).json({ error: 'Failed to register' });
+//     }
+//   } catch (err) {
+//     console.error('Error during registration:', err);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   } finally {
+//     sql.close();
+//   }
+// });
+
+app.delete('/deleteGroup/:username/:groupid', async (req, res) => {
+  try {
+    const { username, groupid } = req.params;
+    const pool = await db.connectDB();
+  
+    const query = queries.deleteGroup(username, groupid);
+    const result = await pool.request().query(query);
+  
+    if (result.rowsAffected[0] > 0) {
+      res.json({ message: 'Group deleted successfully' });
+    } else {
+      res.status(404).json({ error: 'Group not found' });
+    }
+  } catch (err) {
+    console.error('Error deleting group:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  } finally {
+    sql.close();
+  }
+});
+
+
+
+
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
